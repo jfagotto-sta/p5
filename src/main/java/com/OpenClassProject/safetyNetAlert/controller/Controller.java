@@ -5,26 +5,36 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.OpenClassProject.safetyNetAlert.model.Firestation;
+import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 import com.OpenClassProject.safetyNetAlert.model.Person;
 
 import services.JsonService;
-import services.PersonService;
 
 @RestController
-public class PersonController {
+public class Controller {
 	
-	private JsonService pService;
+	private JsonService Service;
 
-	public PersonController(JsonService pService) {
+	public Controller(JsonService Service) {
 		super();
-		this.pService = pService;
+		this.Service = Service;
 	}
 	
 	@GetMapping(path = "/persons")
 	public List<Person> getAll() {
-		return pService.getAllPersonsFromFile();
+		return Service.getAllPersonsFromFile();
 	}
 	
+	@GetMapping(path = "/firestations")
+	public List<Firestation> getAllFirestations(){
+		return Service.getAllFirestationsFromFile();
+	}
+	
+	@GetMapping(path = "/medicalrecords")
+	public List<Medicalrecords> getAllMedicalRecords(){
+		return Service.getAllMedicalRecordsFromFile();
+	}
 	
 //	@GetMapping(path = "/personInfo")
 //	public Person getInfo(String firstName, String lastName) {
