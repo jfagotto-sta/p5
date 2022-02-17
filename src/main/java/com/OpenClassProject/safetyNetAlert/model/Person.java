@@ -1,23 +1,33 @@
-package model;
+package com.OpenClassProject.safetyNetAlert.model;
 
-	public class Person {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class Person {
+		
+		// ID
+		@JsonIgnore
+		private Long id;
 		
 		private String firstName;
 		private String lastName;
-		private String adress;
+		private String address;
 		private String city;
-		private int zip;
+		private String zip;
 		private String phone;
 		private String email;
 		
-		public Person(String firstName, String lastName, String adress, String phone,
-				String email) {
+		public Person() {
+			
+		}
+		
+		public Person(String firstName, String lastName, String address, String city, String zip,
+				String phone, String email) {
 			super();
 			this.firstName = firstName;
 			this.lastName = lastName;
-			this.adress = adress;
-			this.city = "Culver";
-			this.zip = 97451;
+			this.address = address;
+			this.city = city;
+			this.zip = zip;
 			this.phone = phone;
 			this.email = email;
 		}
@@ -38,12 +48,12 @@ package model;
 			this.lastName = lastName;
 		}
 
-		public String getAdress() {
-			return adress;
+		public String getAddress() {
+			return address;
 		}
 
-		public void setAdress(String adress) {
-			this.adress = adress;
+		public void setAddress(String address) {
+			this.address = address;
 		}
 
 		public String getPhone() {
@@ -66,8 +76,14 @@ package model;
 			return city;
 		}
 
-		public int getZip() {
+		public String getZip() {
 			return zip;
+		}
+
+		@Override
+		public String toString() {
+			return "Person [firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", city="
+					+ city + ", zip=" + zip + ", phone=" + phone + ", email=" + email + "]";
 		}
 		
 
