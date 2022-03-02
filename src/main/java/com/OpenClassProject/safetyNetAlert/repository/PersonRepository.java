@@ -11,5 +11,12 @@ public interface PersonRepository {
 	
 	public List<Person> getAll();
 	
+	public Person createANewPerson(Person person);
+	
+	public void deleteAPerson(String lastName, String firstName);
+	
+	public Person updateAPerson(Person person);
+
+	
 
 }

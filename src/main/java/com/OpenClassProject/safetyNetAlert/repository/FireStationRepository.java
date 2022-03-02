@@ -10,5 +10,11 @@ import com.OpenClassProject.safetyNetAlert.model.Firestation;
 public interface FireStationRepository {
 	
 	public List<Firestation> getAllFirestations();
+	
+	public Firestation createAMappingFirestationAdress(Firestation firestation);
+	
+	public void deleteAFirestation(Firestation firestation);
+	
+	public void updateAFirestation (Firestation firestation);
 
 }

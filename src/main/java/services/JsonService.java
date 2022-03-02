@@ -21,6 +21,7 @@ public class JsonService {
 	}
 	
 
+
 	public List<Person> getAllPersonsFromFile() {
 		return repository.getAllPersonsFromFile();
 		
@@ -35,6 +36,5 @@ public class JsonService {
 		return repository.getAllMedicalRecordsFromFile();
 		
 	}
-	
 	
 }

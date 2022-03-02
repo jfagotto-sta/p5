@@ -10,5 +10,11 @@ import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 public interface MedicalRecordsRepository {
 	
 	public List<Medicalrecords> getAllMedicalRecords();
+	
+	public Medicalrecords createAMedicalRecord(Medicalrecords medicalrecords);
+	
+	public void deleteAMedicalrecord(Medicalrecords medicalrecords);
+	
+	public void updateAMedicalrecord (Medicalrecords medicalrecords);
 
 }

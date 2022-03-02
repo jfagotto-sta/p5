@@ -3,8 +3,11 @@ package com.OpenClassProject.safetyNetAlert.repository;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,6 +32,7 @@ public class JsonFileRepository implements IRepository {
 	private List<Firestation> firestations = new ArrayList<>();
 	private List<Medicalrecords> medicalRecords = new ArrayList<>();
 	
+
 	
 	private InputStreamReader getFileReader() {
 		return new InputStreamReader(getClass().getClassLoader().getResourceAsStream("data/data.json"));
@@ -36,6 +40,8 @@ public class JsonFileRepository implements IRepository {
 	
 	public List<Person> getAllPersonsFromFile() {
 		try {
+			
+			if (persons.isEmpty()) {
 			parser = new JSONParser();
 			mapper = new ObjectMapper();
 			object = (JSONObject) parser.parse(getFileReader());
@@ -43,19 +49,19 @@ public class JsonFileRepository implements IRepository {
 			iterator = personsArray.listIterator();
 			while(iterator.hasNext()) {
 				persons.add(mapper.readValue(iterator.next().toString(), Person.class));
+				}
 			}
-			return persons;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return null;
-		
+		return persons;	
 	}
 	
 	public List<Firestation> getAllFirestationsFromFile() {
 		try {
+			if (firestations.isEmpty()) {
 			parser = new JSONParser();
 			mapper = new ObjectMapper();
 			object = (JSONObject) parser.parse(getFileReader());
@@ -64,18 +70,19 @@ public class JsonFileRepository implements IRepository {
 			while(iterator.hasNext()) {
 				firestations.add(mapper.readValue(iterator.next().toString(), Firestation.class));
 			}
-			return firestations;
+		}	
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return firestations;
 		
 	}
 	
 	public List<Medicalrecords> getAllMedicalRecordsFromFile() {
 		try {
+			if (medicalRecords.isEmpty()) {
 			parser = new JSONParser();
 			mapper = new ObjectMapper();
 			object = (JSONObject) parser.parse(getFileReader());
@@ -83,16 +90,128 @@ public class JsonFileRepository implements IRepository {
 			iterator = medicalRecordsArray.listIterator();
 			while(iterator.hasNext()) {
 				medicalRecords.add(mapper.readValue(iterator.next().toString(), Medicalrecords.class));
+				}
 			}
-			return medicalRecords;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return medicalRecords;
 		
 	}
+	
+	public void deleteAPerson(String lastName, String firstName) {
+		this.persons = getAllPersonsFromFile();		
+		Person person = getPersonWithThisLastNameAndFirstName(lastName, firstName);
+		if(person != null) {
+			this.persons.remove(person);
+		}
+		
+	}
+	
+	public Person createAPerson (Person person) {
+		this.persons = getAllPersonsFromFile();
+		persons.add(person);
+		return person;
+	}
+	
+	public Person getPersonWithThisLastNameAndFirstName(String lastName, String firstName) {
+		this.persons = getAllPersonsFromFile();
+		for (Person person : persons) {
+			if(person.getFirstName().equals(firstName) && person.getLastName().equals(lastName)) {
+				return person;
+			}
+		}
+		return null;
+	}
+	
+	public Firestation getFirestation(String addres, int station) {
+		this.firestations = getAllFirestationsFromFile();
+		for (Firestation firestation : firestations) {
+			if(firestation.getAddress().equals(addres) && firestation.getStation() == station) {
+				return firestation;
+			}
+		}	
+		return null;	
+	}
+	
+	public Person updateAPerson (Person person) {
+		this.persons = getAllPersonsFromFile();
+		Person foundAPersonToUpdate = getPersonWithThisLastNameAndFirstName(person.getLastName(), person.getFirstName());
+		if(foundAPersonToUpdate != null) {
+			foundAPersonToUpdate.setAddress(person.getAddress());
+			foundAPersonToUpdate.setEmail(person.getEmail());
+			foundAPersonToUpdate.setPhone(person.getPhone());
+			foundAPersonToUpdate.setCity(person.getCity());
+			foundAPersonToUpdate.setZip(person.getZip());
+
+			
+			return foundAPersonToUpdate;
+		}
+		return null;
+	}
+		
+	public Firestation createAMappingFirestationAdress(Firestation firestation) {
+		this.firestations = getAllFirestationsFromFile();
+		firestations.add(firestation);
+		return firestation;	
+	}
+	
+	public void deleteAFirestation(Firestation firestation) {
+		this.firestations = getAllFirestationsFromFile();
+		Optional<Firestation> foundAFiretation = firestations.stream().filter(fs -> fs.equals(firestation)).findFirst();
+		if(foundAFiretation.isPresent()) {
+			this.firestations.remove(firestation);
+		}
+	}
+		
+	public Firestation updateAFirestation (Firestation firestation) {
+		this.firestations = getAllFirestationsFromFile();
+		Firestation foundAFirestationToUpdate = getFirestation(firestation.getAddress(), firestation.getStation());
+		return foundAFirestationToUpdate;
+	}
+	
+	public Medicalrecords createAMedicalRecord(Medicalrecords medicalrecords) {
+		this.medicalRecords = getAllMedicalRecordsFromFile();
+		medicalRecords.add(medicalrecords);
+		return medicalrecords;
+		
+	}
+	
+	public void deleteAMedicalrecord(Medicalrecords medicalrecords) {
+		this.medicalRecords = getAllMedicalRecordsFromFile();
+		Optional<Medicalrecords> foundAMedicalRecords = ((Collection) medicalrecords).stream().filter(fs -> fs.equals(medicalrecords)).findFirst();
+		if(foundAMedicalRecords.isPresent()) {
+			this.medicalRecords.remove(medicalrecords);
+		}
+	}	
+	
+	public Medicalrecords getMdicalReocrdsWithThisLastNameAndFirstName(String lastName, String firstName) {
+		this.medicalRecords = getAllMedicalRecordsFromFile();
+		for (Medicalrecords medicalrecords : medicalRecords) {
+			if(medicalrecords.getFirstName().equals(firstName) && medicalrecords.getLastName().equals(lastName)) {
+				return medicalrecords;
+			}
+		}
+		return null;
+	}
+	
+	public void updateAMedicalrecord (Medicalrecords medicalrecords) {
+		this.medicalRecords = getAllMedicalRecordsFromFile();
+		
+		Medicalrecords foundAMedicalRecord = getMdicalReocrdsWithThisLastNameAndFirstName(medicalrecords.getLastName(), medicalrecords.getFirstName());
+		if (foundAMedicalRecord != null) {
+			foundAMedicalRecord.setBirthdate(medicalrecords.getBirthdate());
+			foundAMedicalRecord.setAllergies(medicalrecords.getAllergies());
+			foundAMedicalRecord.setMedications(medicalrecords.getMedications());
+		}
+		
+		}
+}
+
+	
+	
 //	
 //	public dsdf() {
 //		
@@ -114,4 +233,4 @@ public class JsonFileRepository implements IRepository {
 //		}
 //		return araylist
 //	}
-}
+
