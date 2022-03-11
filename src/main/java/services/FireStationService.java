@@ -32,12 +32,12 @@ public class FireStationService implements FireStationRepository {
 		return fireStationRepo.createAMappingFirestationAdress(firestation);
 	}
 	
-	public void deleteAFirestation(Firestation firestation){
-		fireStationRepo.deleteAFirestation(firestation);
+	public boolean deleteAFirestation(Firestation firestation){
+		return fireStationRepo.deleteAFirestation(firestation);
 	}
 	
-	public void updateAFirestation (Firestation firestation){
-		fireStationRepo.updateAFirestation(firestation);
+	public Firestation updateAFirestation (Firestation firestation){
+		return fireStationRepo.updateAFirestation(firestation);
 	}
 
 

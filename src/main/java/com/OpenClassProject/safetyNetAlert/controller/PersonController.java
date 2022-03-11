@@ -10,17 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.OpenClassProject.safetyNetAlert.model.Firestation;
-import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 import com.OpenClassProject.safetyNetAlert.model.Person;
+import com.OpenClassProject.safetyNetAlert.model.specific.ChildAlert;
+import com.OpenClassProject.safetyNetAlert.model.specific.PersonInfo;
 
-import services.FireStationService;
 import services.JsonService;
-import services.MedicalRecordsService;
 import services.PersonService;
 
 @RestController
@@ -38,16 +35,10 @@ public class PersonController {
 	}
 	
 	@GetMapping(path = "/persons")
+	@ResponseStatus(code = HttpStatus.OK)
 	public List<Person> getAll() {
 		return JsService.getAllPersonsFromFile();
 	}
-	
-	
-	
-//	@GetMapping(path = "/caserne/adresse")
-//	public List<Firestation> getAllFirestations(){
-//		return JsService.getAllFirestationsFromFile();
-//	}
 	
 	
 	@PostMapping(path = "/persons", consumes = MediaType.APPLICATION_JSON_VALUE, 
@@ -59,7 +50,7 @@ public class PersonController {
 	
 	
 	@DeleteMapping(path = "/persons")
-	@ResponseBody
+	@ResponseStatus(code = HttpStatus.OK)
 	public String deleteAPerson(@RequestParam String lastName, String firstName) {
 		PService.deleteAPerson(lastName, firstName);
 		return "test";
@@ -74,17 +65,21 @@ public class PersonController {
 	}
 	
 	
+	@GetMapping(path = "/personInfo")
+	@ResponseStatus(code = HttpStatus.OK)
+	public PersonInfo getPersonInfo(@RequestParam String lastName, String firstName) {
+		return PService.personInfo(lastName, firstName);
+
+	}
 	
-	
-	
-	
+	@GetMapping(path = "/childAlert")
+	@ResponseStatus(code = HttpStatus.OK)
+	public ChildAlert getChildAlert(@RequestParam String address) {
+		return PService.getChildAlert(address);
+
+	}
 	
 }
 
-	
-//	@GetMapping(path = "/personInfo")
-//	public Person getInfo(String firstName, String lastName) {
-//		return pService.findAPersonWithHisLastNameAndFirstName(lastName, firstName);
-//		
-//	}
+
 

@@ -13,8 +13,8 @@ public interface MedicalRecordsRepository {
 	
 	public Medicalrecords createAMedicalRecord(Medicalrecords medicalrecords);
 	
-	public void deleteAMedicalrecord(Medicalrecords medicalrecords);
+	public boolean deleteAMedicalrecord(String lastName, String firstName);
 	
-	public void updateAMedicalrecord (Medicalrecords medicalrecords);
+	public Medicalrecords updateAMedicalrecord (Medicalrecords medicalrecords);
 
 }

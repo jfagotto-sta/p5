@@ -34,13 +34,13 @@ public class MedicalRecordsService implements MedicalRecordsRepository {
 	}
 	
 	@Override
-	public void deleteAMedicalrecord(Medicalrecords medicalrecords){
-		medicalRep.deleteAMedicalrecord(medicalrecords);
+	public boolean deleteAMedicalrecord(String lastName, String firstName){
+		return medicalRep.deleteAMedicalrecord(lastName, firstName);
 	}
 	
 	@Override
-	public void updateAMedicalrecord (Medicalrecords medicalrecords){
-		medicalRep.updateAMedicalrecord(medicalrecords);
+	public Medicalrecords updateAMedicalrecord (Medicalrecords medicalrecords){
+		return medicalRep.updateAMedicalrecord(medicalrecords);
 	}
 
 }

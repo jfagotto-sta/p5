@@ -1,12 +1,15 @@
 package com.OpenClassProject.safetyNetAlert.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class Medicalrecords {
 	
 	private String firstName;
 	private String lastName;
-	private String birthdate;
+	private Date birthdate;
 	private List<String> medications;
 	private List<String> allergies;
 	
@@ -14,7 +17,7 @@ public class Medicalrecords {
 		
 	}
 
-	public Medicalrecords(String firstName, String lastName, String birthdate, List<String> medications,
+	public Medicalrecords(String firstName, String lastName, Date birthdate, List<String> medications,
 			List<String> allergies) {
 		super();
 		this.firstName = firstName;
@@ -40,12 +43,13 @@ public class Medicalrecords {
 		this.lastName = lastName;
 	}
 
-	public String getBirthdate() {
+	public Date getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(String birthdate) {
-		this.birthdate = birthdate;
+	
+	public void setBirthdate(String birthdate) throws ParseException {
+		this.birthdate = new SimpleDateFormat("dd/MM/yyyy").parse(birthdate);
 	}
 
 	public List<String> getMedications() {
@@ -63,5 +67,5 @@ public class Medicalrecords {
 	public void setAllergies(List<String> allergies) {
 		this.allergies = allergies;
 	}
-	
+			
 }

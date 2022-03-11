@@ -12,16 +12,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.OpenClassProject.safetyNetAlert.model.Firestation;
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 import com.OpenClassProject.safetyNetAlert.model.Person;
+import com.OpenClassProject.safetyNetAlert.repository.JsonFileRepository;
 
-import services.JsonService;
 
+ 
+@SpringBootTest
 class ListTests {
 	
-	private JsonService JsService = new JsonService();
+	@Autowired
+	private JsonFileRepository JsfRepo;
 	
 	private List<Person> persons = new ArrayList<>();
 	private List<Firestation> firestations = new ArrayList<>();
@@ -48,7 +53,7 @@ class ListTests {
 	@DisplayName("Test pour vérifier l'initialisation de la liste de personnes")
 	@Test
 	public void testListOfPerson() {
-		persons = JsService.getAllPersonsFromFile();
+		persons = JsfRepo.getAllPersonsFromFile();
 		
 		assertTrue(persons.size()>0);
 	}
@@ -56,7 +61,7 @@ class ListTests {
 	@DisplayName("Test pour vérifier l'initialisation de la liste de casernes")
 	@Test
 	public void testListOfFirestation() {
-		firestations = JsService.getAllFirestationsFromFile();
+		firestations = JsfRepo.getAllFirestationsFromFile();
 		
 		assertTrue(firestations.size()>0);
 	}
@@ -64,7 +69,7 @@ class ListTests {
 	@DisplayName("Test pour vérifier l'initialisation de la liste de profils médicamenteux")
 	@Test
 	public void testListOfMedicalrecord() {
-		medicalRecords = JsService.getAllMedicalRecordsFromFile();
+		medicalRecords = JsfRepo.getAllMedicalRecordsFromFile();
 		
 		assertTrue(medicalRecords.size()>0);
 	}

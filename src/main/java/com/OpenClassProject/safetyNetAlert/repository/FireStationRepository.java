@@ -13,8 +13,8 @@ public interface FireStationRepository {
 	
 	public Firestation createAMappingFirestationAdress(Firestation firestation);
 	
-	public void deleteAFirestation(Firestation firestation);
+	public boolean deleteAFirestation(Firestation firestation);
 	
-	public void updateAFirestation (Firestation firestation);
+	public Firestation updateAFirestation (Firestation firestation);
 
 }

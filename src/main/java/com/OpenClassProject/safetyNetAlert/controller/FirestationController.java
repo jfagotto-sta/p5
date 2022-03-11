@@ -32,25 +32,29 @@ public class FirestationController {
 	}
 
 	@GetMapping(path = "/firestations")
+	@ResponseStatus(code = HttpStatus.OK)
 	public List<Firestation> getAllFirestations(){
 		return JsService.getAllFirestationsFromFile();
 	}
 	
-	@PostMapping(path = "/firestations")
+	@PostMapping(path = "/firestations", consumes = MediaType.APPLICATION_JSON_VALUE, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(code = HttpStatus.OK)
 	public Firestation AddFirestation (@RequestBody Firestation firestation){	
 		return FService.createAMappingFirestationAdress(firestation);
 	}
 	
-	@DeleteMapping(path = "/firestations")
-	public void deleteAFirestation(@RequestParam Firestation firestation) {
-		FService.deleteAFirestation(firestation);
+	@DeleteMapping(path = "/firestations", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(code = HttpStatus.OK)
+	public boolean deleteAFirestation(@RequestBody Firestation firestation) {
+		return FService.deleteAFirestation(firestation);
 	}
 	
 	@PutMapping(path = "/firestations", consumes = MediaType.APPLICATION_JSON_VALUE, 
 	produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.OK)
-		public void updateAFirestation(@RequestBody Firestation firestations) {
-		FService.updateAFirestation(firestations);
+		public Firestation updateAFirestation(@RequestBody Firestation firestations) {
+		return FService.updateAFirestation(firestations);
 	}
 	
 	
