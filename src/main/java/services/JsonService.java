@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.OpenClassProject.safetyNetAlert.model.Firestation;
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 import com.OpenClassProject.safetyNetAlert.model.Person;
-import com.OpenClassProject.safetyNetAlert.model.specific.PersonInfo;
 import com.OpenClassProject.safetyNetAlert.repository.IRepository;
 
 @Service

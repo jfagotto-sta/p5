@@ -51,6 +51,10 @@ public class Medicalrecords {
 	public void setBirthdate(String birthdate) throws ParseException {
 		this.birthdate = new SimpleDateFormat("dd/MM/yyyy").parse(birthdate);
 	}
+	
+	public void setBirthdate(Date birthdate) throws ParseException {
+		this.birthdate = birthdate;
+	}
 
 	public List<String> getMedications() {
 		return medications;

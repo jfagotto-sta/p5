@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
-import services.PersonService;
+import services.IPersonService;
 
 
 @SpringBootTest
@@ -45,7 +45,7 @@ class PersonControllerTest {
 	public MockMvc mockMvc;
 	
 	@MockBean
-	private PersonService personService;
+	private IPersonService personService;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -67,7 +67,7 @@ class PersonControllerTest {
 	
 	
 	@Test
-	public void createAPersonTest() throws Exception {
+	 void createAPersonTest() throws Exception {
 		
 		Person person = new Person();
 		person.setAddress("10 rue de paris");
@@ -87,7 +87,7 @@ class PersonControllerTest {
 	
 	
 	@Test
-	public void putPersonTest() throws Exception {
+	 void putPersonTest() throws Exception {
 		
 		Person person = new Person();
 		person.setAddress("10 rue de paris");
@@ -123,16 +123,41 @@ class PersonControllerTest {
 	}
 	
 	@Test
-	public void deleteAPerson() throws Exception {
+	 void deleteAPerson() throws Exception {
 		
 		mockMvc.perform(delete("/persons").param("firstName", "John").param("lastName", "Boyd"))
 				.andExpect(status().isOk());
 	}
 	
 	@Test
-	public void getAPerson() throws Exception {
+	 void getAPerson() throws Exception {
 		
 		mockMvc.perform(get("/personInfo").param("firstName", "John").param("lastName", "Boyd"))
 		.andExpect(status().isOk());
-	}	
+	}
+
+	@Test
+	void personInfos() throws Exception {
+
+		mockMvc.perform(get("/personInfo").param("firstName","john").param("lastName","Boyd"))
+				.andExpect(status().isOk());
+
+	}
+
+	@Test
+	void childAlert() throws Exception {
+
+
+		mockMvc.perform(get("/childAlert").param("address","1509 Culver St"))
+				.andExpect(status().isOk());
+	}
+	@Test
+	void personLivingAtThisAddress() throws Exception {
+
+		mockMvc.perform(get("/fire").param("address","1509 Culver St"))
+				.andExpect(status().isOk());
+
+	}
+
+
 }

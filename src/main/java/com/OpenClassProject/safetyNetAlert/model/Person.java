@@ -5,11 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Person {
-		
-		// ID
-		@JsonIgnore
-		private Long id;
-		
+
 		private String firstName;
 		private String lastName;
 		private String address;

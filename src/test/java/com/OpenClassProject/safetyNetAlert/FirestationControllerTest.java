@@ -75,4 +75,27 @@ class FirestationControllerTest {
 		
 	}
 
+	@Test
+	void phonaAlert() throws Exception {
+
+		mockMvc.perform(get("/phoneAlert").param("station","1"))
+				.andExpect(status().isOk());
+
+	}
+
+	@Test
+	void floodAlert() throws Exception {
+
+		mockMvc.perform(get("/flood").param("stations","1"))
+				.andExpect(status().isOk());
+
+	}
+	@Test
+	void personCovered() throws Exception {
+
+		mockMvc.perform(get("/firestation").param("stationNumber","1"))
+				.andExpect(status().isOk());
+
+	}
+
 }

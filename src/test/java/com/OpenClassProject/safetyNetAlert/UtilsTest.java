@@ -11,7 +11,6 @@ import com.OpenClassProject.safetyNetAlert.utils.Utils;
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 
 
-
 class UtilsTest {
 
 	@Test
@@ -20,9 +19,9 @@ class UtilsTest {
 		Medicalrecords medicalrecords= new Medicalrecords();
 		
 		medicalrecords.setBirthdate("09/06/2000");
+
 		int age = Utils.getAgeFromBirthdate(medicalrecords.getBirthdate());
 
-		assertEquals(22, age);
+		assertEquals(21, age);
 	}
-
 }

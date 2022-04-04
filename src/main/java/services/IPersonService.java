@@ -4,21 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.OpenClassProject.safetyNetAlert.model.Person;
+import com.OpenClassProject.safetyNetAlert.model.specific.AllInfoFromPerson;
 import com.OpenClassProject.safetyNetAlert.model.specific.ChildAlert;
-import com.OpenClassProject.safetyNetAlert.model.specific.PersonInfo;
 import com.OpenClassProject.safetyNetAlert.repository.IRepository;
-import com.OpenClassProject.safetyNetAlert.repository.PersonRepository;
 
 @Service
-public class PersonService implements PersonRepository {
+public class IPersonService implements services.ServiceInterface.IPersonService {
 	
 	private IRepository personRepo;
 	
 	@Autowired
-	public PersonService(IRepository repo) {
+	public IPersonService(IRepository repo) {
 		this.personRepo = repo;
 	}
 	
@@ -42,12 +40,17 @@ public class PersonService implements PersonRepository {
 		
 	}
 
-	public PersonInfo personInfo(String lastName, String firstName) {
+	public List<AllInfoFromPerson> personInfo(String lastName, String firstName) {
 		return personRepo.getPersonInfo(lastName, firstName);
 	}
 	
 	public ChildAlert getChildAlert(String address) {
 		return personRepo.getChildAlert(address);
+	}
+
+
+	public List<AllInfoFromPerson> getPersonLivingInThisAddress(String address) {
+		return personRepo.getPersonLivingAtThisAddress(address);
 	}
 	
 }

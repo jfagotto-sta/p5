@@ -1,13 +1,18 @@
 package com.OpenClassProject.safetyNetAlert.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.OpenClassProject.safetyNetAlert.model.Firestation;
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 import com.OpenClassProject.safetyNetAlert.model.Person;
+import com.OpenClassProject.safetyNetAlert.model.specific.AllInfoFromPerson;
+import com.OpenClassProject.safetyNetAlert.model.specific.ByStationInfo;
 import com.OpenClassProject.safetyNetAlert.model.specific.ChildAlert;
-import com.OpenClassProject.safetyNetAlert.model.specific.PersonInfo;
+import com.OpenClassProject.safetyNetAlert.model.specific.PeopleAtFirestation;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface IRepository {
 	
 	public List<Person> getAllPersonsFromFile();
@@ -34,7 +39,15 @@ public interface IRepository {
 	
 	public Medicalrecords updateAMedicalrecord (Medicalrecords medicalrecords);
 
-	public PersonInfo getPersonInfo(String lastName, String firstName);
+	public List<AllInfoFromPerson> getPersonInfo(String lastName, String firstName);
 	
 	public ChildAlert getChildAlert(String address);
+
+	public List<String> getPhoneAlert(int station);
+
+	public List<AllInfoFromPerson> getPersonLivingAtThisAddress(String address);
+	
+	public List<ByStationInfo> getInfoFromStationList(List<String> stations);
+
+	public PeopleAtFirestation personsCoveredByAFirestation(int station);
 }

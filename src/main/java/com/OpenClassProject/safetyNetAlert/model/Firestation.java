@@ -2,8 +2,12 @@ package com.OpenClassProject.safetyNetAlert.model;
 
 import java.util.Objects;
 
+import com.OpenClassProject.safetyNetAlert.controller.View;
+import com.fasterxml.jackson.annotation.JsonView;
+
 public class Firestation {
 	private String address;
+
 	private int station;
 	
 	public Firestation (String address, int station) {

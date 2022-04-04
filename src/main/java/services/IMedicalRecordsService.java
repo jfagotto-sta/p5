@@ -7,16 +7,15 @@ import org.springframework.stereotype.Service;
 
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 import com.OpenClassProject.safetyNetAlert.repository.IRepository;
-import com.OpenClassProject.safetyNetAlert.repository.MedicalRecordsRepository;
 
 @Service
-public class MedicalRecordsService implements MedicalRecordsRepository {
+public class IMedicalRecordsService implements services.ServiceInterface.IMedicalRecordsService {
 
 	private IRepository medicalRep;
 	
 	
 	@Autowired
-	public MedicalRecordsService(IRepository medicalRep) {
+	public IMedicalRecordsService(IRepository medicalRep) {
 		super();
 		this.medicalRep = medicalRep;
 	}

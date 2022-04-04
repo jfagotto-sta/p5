@@ -9,15 +9,29 @@ import com.fasterxml.jackson.annotation.JsonView;
 @JsonView(View.viewChildAlert.class)
 public class ChildAlert {
 
+	
+	private String lastName;
+	private String firstName;
+	private String phoneNumber;
+	
 	private String address;
 	private List<AllInfoFromPerson> enfants;
 	private List<AllInfoFromPerson> adultes;
 
-	public ChildAlert(String address, List<AllInfoFromPerson> enfants, List<AllInfoFromPerson> adultes) {
+	
+
+	public ChildAlert(String lastName, String firstName, String phoneNumber, String address,
+			List<AllInfoFromPerson> enfants, List<AllInfoFromPerson> adultes) {
 		super();
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.enfants = enfants;
 		this.adultes = adultes;
+	}
+
+	public ChildAlert() {
 	}
 
 	public String getAddress() {
@@ -46,7 +60,7 @@ public class ChildAlert {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, adultes, enfants);
+		return Objects.hash(address, enfants);
 	}
 
 	@Override
@@ -58,8 +72,30 @@ public class ChildAlert {
 		if (getClass() != obj.getClass())
 			return false;
 		ChildAlert other = (ChildAlert) obj;
-		return Objects.equals(address, other.address) && Objects.equals(adultes, other.adultes)
-				&& Objects.equals(enfants, other.enfants);
+		return Objects.equals(address, other.address) && Objects.equals(enfants, other.enfants);
 	}
 
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 }

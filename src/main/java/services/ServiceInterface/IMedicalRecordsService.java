@@ -1,13 +1,14 @@
-package com.OpenClassProject.safetyNetAlert.repository;
+package services.ServiceInterface;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
+import org.springframework.stereotype.Service;
 
-@Repository
-public interface MedicalRecordsRepository {
+@Service
+public interface IMedicalRecordsService {
 	
 	public List<Medicalrecords> getAllMedicalRecords();
 	

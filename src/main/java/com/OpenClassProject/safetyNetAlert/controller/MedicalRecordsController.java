@@ -2,6 +2,8 @@ package com.OpenClassProject.safetyNetAlert.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,17 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 
 import services.JsonService;
-import services.MedicalRecordsService;
+import services.IMedicalRecordsService;
 
 @RestController
 public class MedicalRecordsController {
+
+	Logger logger = LoggerFactory.getLogger(MedicalRecordsController.class);
 	
-	private MedicalRecordsService MService;
+	private IMedicalRecordsService MService;
 	private JsonService JsService;
 	
 
 	
-	public MedicalRecordsController(MedicalRecordsService mService, JsonService jsService) {
+	public MedicalRecordsController(IMedicalRecordsService mService, JsonService jsService) {
 		super();
 		MService = mService;
 		JsService = jsService;
@@ -36,13 +40,15 @@ public class MedicalRecordsController {
 	@GetMapping(path = "/medicalrecords")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<Medicalrecords> getAllMedicalRecords(){
+		logger.info("Medicalrecords initialized");
 		return JsService.getAllMedicalRecordsFromFile();
 	}
 	
 	@PostMapping(path = "/medicalrecords", consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.OK)
-	public Medicalrecords AddFMedicalrecord (@RequestBody Medicalrecords medicalrecord){	
+	public Medicalrecords AddMedicalrecord (@RequestBody Medicalrecords medicalrecord){
+		logger.info("Medicalrecord created");
 		return MService.createAMedicalRecord(medicalrecord);
 	}
 	
@@ -50,12 +56,14 @@ public class MedicalRecordsController {
 		    produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.OK)
 	public Medicalrecords updateAMedicalrecords(@RequestBody Medicalrecords medicalrecords) {
+		logger.info("Medicalrecord updated");
 		return MService.updateAMedicalrecord(medicalrecords);
 	}
 	
 	@DeleteMapping(path = "/medicalrecords")
 	@ResponseStatus(code = HttpStatus.OK)
 	public boolean deleteAMedicalrecord(@RequestParam String lastName, String firstName) {
+		logger.info("Medicalrecord deleted");
 		return MService.deleteAMedicalrecord(lastName, firstName);
 	}
 }

@@ -15,7 +15,10 @@ public class Utils {
 		
 		int age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
 		
+		if ((today.get(Calendar.DAY_OF_MONTH) < birthDate.get(Calendar.DAY_OF_MONTH)) || 
+				(today.get(Calendar.MONTH) < birthDate.get(Calendar.MONTH)) ) {
+			age--;
+		}	
 		return age;
-	}
-	
+	}	
 }

@@ -1,10 +1,14 @@
 package com.OpenClassProject.safetyNetAlert.model.specific;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import com.OpenClassProject.safetyNetAlert.controller.View;
 import com.fasterxml.jackson.annotation.JsonView;
+
 
 public class AllInfoFromPerson {
 
@@ -15,16 +19,37 @@ public class AllInfoFromPerson {
 	private String lastName; //
 	private String city;
 	private String zip;
+	
+	@JsonView(View.infoAddress.class)
+	private String address;
+	
+	@JsonView(View.infoStation.class)
+	private int station;
+	
+	@JsonView(View.infoPhone.class)
 	private String phone;
+	
+	@JsonView(View.infoMail.class)
 	private String email;
+	private Date birthdate;
 
 	@JsonView(View.infoAge.class)
 	private int age; //
+	
+	@JsonView(View.infoMedications.class)
 	private List<String> medications;
+	
+	@JsonView(View.infoAllergies.class)
 	private List<String> allergies;
 
+	
+	
+	public AllInfoFromPerson() {
+		
+	}
+	
 	public AllInfoFromPerson(String firstName, String lastName, String city, String zip, String phone, String email,
-			int age, List<String> medications, List<String> allergies) {
+			int age, List<String> medications, List<String> allergies, Date birthdate, String address, int station) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -35,6 +60,10 @@ public class AllInfoFromPerson {
 		this.age = age;
 		this.medications = medications;
 		this.allergies = allergies;
+		this.birthdate = birthdate;
+		this.address = address;
+		this.station = station;
+
 	}
 
 	public String getFirstName() {
@@ -127,6 +156,30 @@ public class AllInfoFromPerson {
 				&& Objects.equals(email, other.email) && Objects.equals(firstName, other.firstName)
 				&& Objects.equals(lastName, other.lastName) && Objects.equals(medications, other.medications)
 				&& Objects.equals(phone, other.phone) && Objects.equals(zip, other.zip);
+	}
+
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(String birthdate) throws ParseException {
+		this.birthdate = new SimpleDateFormat("dd/MM/yyyy").parse(birthdate);
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getStation() {
+		return station;
+	}
+
+	public void setStation(int station) {
+		this.station = station;
 	}
 
 }

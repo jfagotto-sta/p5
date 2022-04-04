@@ -3,8 +3,10 @@ package com.OpenClassProject.safetyNetAlert.repository;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Optional;
 
 import org.json.simple.JSONArray;
@@ -16,8 +18,11 @@ import org.springframework.stereotype.Repository;
 import com.OpenClassProject.safetyNetAlert.model.Firestation;
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 import com.OpenClassProject.safetyNetAlert.model.Person;
+import com.OpenClassProject.safetyNetAlert.model.specific.AllInfoFromPerson;
+import com.OpenClassProject.safetyNetAlert.model.specific.ByStationInfo;
 import com.OpenClassProject.safetyNetAlert.model.specific.ChildAlert;
-import com.OpenClassProject.safetyNetAlert.model.specific.PersonInfo;
+import com.OpenClassProject.safetyNetAlert.model.specific.PeopleAtFirestation;
+import com.OpenClassProject.safetyNetAlert.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
@@ -209,7 +214,11 @@ public class JsonFileRepository implements IRepository {
 		Medicalrecords foundAMedicalRecord = getMdicalReocrdsWithThisLastNameAndFirstName(medicalrecords.getLastName(),
 				medicalrecords.getFirstName());
 		if (foundAMedicalRecord != null) {
-			foundAMedicalRecord.setBirthdate(medicalrecords.getBirthdate());
+			try {
+				foundAMedicalRecord.setBirthdate(medicalrecords.getBirthdate());
+			} catch (java.text.ParseException e) {
+				e.printStackTrace();
+			}
 			foundAMedicalRecord.setAllergies(medicalrecords.getAllergies());
 			foundAMedicalRecord.setMedications(medicalrecords.getMedications());
 		}
@@ -217,32 +226,30 @@ public class JsonFileRepository implements IRepository {
 	}
 
 	@Override
-	public PersonInfo getPersonInfo(String lastName, String firstName) {
+	public List<AllInfoFromPerson> getPersonInfo(String lastName, String firstName) {
 		this.persons = getAllPersonsFromFile();
 		this.medicalRecords = getAllMedicalRecordsFromFile();
+		List<AllInfoFromPerson> personInfos = new ArrayList<>();
 
-		Person p = null;
 		for (Person person : persons) {
 			if (person.getFirstName().equals(firstName) && person.getLastName().equals(lastName)) {
-				p = person;
-			}
-		}
-		Medicalrecords m = null;
-		for (Medicalrecords medicalrecord : medicalRecords) {
-			if (medicalrecord.getFirstName().equals(firstName) && medicalrecord.getLastName().equals(lastName)) {
-				m = medicalrecord;
-			}
-		}
-		PersonInfo pInfo = new PersonInfo();
-		pInfo.setFirstName(p.getFirstName());
-		pInfo.setLastName(p.getLastName());
-		pInfo.setEmail(p.getEmail());
-		if (m != null) {
-			pInfo.setAllergies(m.getAllergies());
-			pInfo.setMedications(m.getMedications());
-		}
+				AllInfoFromPerson pInfo = new AllInfoFromPerson();
+				pInfo.setFirstName(person.getFirstName());
+				pInfo.setLastName(person.getLastName());
+				pInfo.setEmail(person.getEmail());
+				for (Medicalrecords medicalrecord : medicalRecords) {
+					if (medicalrecord.getFirstName().equals(firstName)
+							&& medicalrecord.getLastName().equals(lastName)) {
+						pInfo.setAllergies(medicalrecord.getAllergies());
+						pInfo.setMedications(medicalrecord.getMedications());
+					}
 
-		return pInfo;
+				}
+				personInfos.add(pInfo);
+			}
+
+		}
+		return personInfos;
 	}
 
 	public List<String> getMailAddressesForACity(String city) {
@@ -259,30 +266,160 @@ public class JsonFileRepository implements IRepository {
 
 	@Override
 	public ChildAlert getChildAlert(String address) {
-		
-		//on va lire toutes les personnes
-		//on check si ces personnes habitent a cette adresse
-		//si oui et > 17  alors on l'ajoute dans la liste adultes
-		//sinon on l'ajoute dans enfant
-		
-		this.persons = getAllPersonsFromFile();
 
-		Person p = null;
+		this.persons = getAllPersonsFromFile();
+		this.medicalRecords = getAllMedicalRecordsFromFile();
+		List<AllInfoFromPerson> enfants = new ArrayList<>();
+		List<AllInfoFromPerson> adultes = new ArrayList<>();
+
 		for (Person person : persons) {
-			if (person.getFirstName().equals(firstName) && person.getLastName().equals(lastName)) {
-				p = person;
+			if (person.getAddress().equals(address)) {
+				AllInfoFromPerson allInfo = new AllInfoFromPerson();
+				allInfo.setLastName(person.getLastName());
+				allInfo.setFirstName(person.getFirstName());
+
+				for (Medicalrecords medicalrecord : medicalRecords) {
+					if (medicalrecord.getFirstName().equals(person.getFirstName())
+							&& medicalrecord.getLastName().equals(person.getLastName())) {
+						int age = Utils.getAgeFromBirthdate(medicalrecord.getBirthdate());
+						allInfo.setAge(age);
+						if (age < 18) {
+							enfants.add(allInfo);
+						} else {
+							adultes.add(allInfo);
+						}
+
+					}
+				}
 			}
 		}
-		
-		ChildAlert pInfo = new ChildAlert();
-		pInfo.setFirstName(p.getFirstName());
-		pInfo.setLastName(p.getLastName());
-		pInfo.setEmail(p.getEmail());
-		if (m != null) {
-			pInfo.setAllergies(m.getAllergies());
-			pInfo.setMedications(m.getMedications());
+		ChildAlert childalert = new ChildAlert();
+		childalert.setAddress(address);
+		childalert.setEnfants(enfants);
+		if (!enfants.isEmpty()) {
+			childalert.setAdultes(adultes);
 		}
 
-		return pInfo;
+		return childalert;
+	}
+
+	@Override
+	public List<String> getPhoneAlert(int station) {
+		this.persons = getAllPersonsFromFile();
+		this.firestations = getAllFirestationsFromFile();
+
+		List<String> phoneNumbers = new ArrayList<>();
+		String address = "";
+		for (Firestation firestation : firestations) {
+			if (firestation.getStation() == station) {
+				address = firestation.getAddress();
+				for (Person person : persons) {
+					if (person.getAddress().equals(address) && !phoneNumbers.contains(person.getPhone())) {
+						phoneNumbers.add(person.getPhone());
+					}
+				}
+
+			}
+
+		}
+		return phoneNumbers;
+	}
+
+	@Override
+	public List<AllInfoFromPerson> getPersonLivingAtThisAddress(String address) {
+		this.persons = getAllPersonsFromFile();
+		this.firestations = getAllFirestationsFromFile();
+		this.medicalRecords = getAllMedicalRecordsFromFile();
+
+		List<AllInfoFromPerson> list = new ArrayList<>();
+
+		for (Person person : persons) {
+			if (person.getAddress().equals(address)) {
+				AllInfoFromPerson allInfo = new AllInfoFromPerson();
+				allInfo.setLastName(person.getLastName());
+				allInfo.setFirstName(person.getFirstName());
+				allInfo.setAddress(person.getAddress());
+				allInfo.setPhone(person.getPhone());
+
+				for (Firestation firestation : firestations) {
+					if (person.getAddress().equals(firestation.getAddress())) {
+						allInfo.setStation(firestation.getStation());
+					}
+				}
+
+				for (Medicalrecords medicalrecord : medicalRecords) {
+					if (medicalrecord.getFirstName().equals(person.getFirstName())
+							&& medicalrecord.getLastName().equals(person.getLastName())) {
+						allInfo.setAllergies(medicalrecord.getAllergies());
+						allInfo.setMedications(medicalrecord.getMedications());
+						allInfo.setAge(Utils.getAgeFromBirthdate(medicalrecord.getBirthdate()));
+						list.add(allInfo);
+					}
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<ByStationInfo> getInfoFromStationList(List<String> stationsFilter) {
+		List<ByStationInfo> stationInfos = new ArrayList<>();
+		for (String station : stationsFilter) {
+			ByStationInfo stationInfo = new ByStationInfo();
+			stationInfo.setStation(Integer.parseInt(station));
+			List<String> adresses = getAdresseFromStation(Integer.parseInt(station));
+			Map<String, List<AllInfoFromPerson>> personByAdresse = new HashMap<>();
+			for (String adresse : adresses) {
+				List<AllInfoFromPerson> personAtThisAdresse = getPersonLivingAtThisAddress(adresse);
+				personByAdresse.put(adresse, personAtThisAdresse);
+			}
+			stationInfo.setPersonByAdresse(personByAdresse);
+			stationInfos.add(stationInfo);
+		}
+
+		return stationInfos;
+
+	}
+
+	public List<String> getAdresseFromStation(int stationNumber) {
+		this.firestations = getAllFirestationsFromFile();
+		List<String> adresses = new ArrayList<>();
+		for (Firestation station : firestations) {
+			if (station.getStation() == stationNumber) {
+				adresses.add(station.getAddress());
+			}
+		}
+		return adresses;
+	}
+
+	@Override
+	public PeopleAtFirestation personsCoveredByAFirestation(int station) {
+		this.persons = getAllPersonsFromFile();
+		this.firestations = getAllFirestationsFromFile();
+		this.medicalRecords = getAllMedicalRecordsFromFile();
+		
+		PeopleAtFirestation peopleAtFirestation = new PeopleAtFirestation();
+		
+		int nbrAdultes = 0;
+		int nbrEnfants = 0;
+		
+		List<String> adresses = getAdresseFromStation(station);
+		for (String adresse : adresses) {
+			List<AllInfoFromPerson> personAtThisAdress = getPersonLivingAtThisAddress(adresse);
+			peopleAtFirestation.getPersons().addAll(personAtThisAdress);
+			for (AllInfoFromPerson allInfo : personAtThisAdress) {
+				if(allInfo.getAge() > 17) {
+					nbrAdultes++;
+				} else {
+					nbrEnfants++;
+				}
+			}
+			
+		}
+		
+		peopleAtFirestation.setNombreAdultes(nbrAdultes);
+		peopleAtFirestation.setNombreEnfants(nbrEnfants);
+		
+		return peopleAtFirestation;
 	}
 }
