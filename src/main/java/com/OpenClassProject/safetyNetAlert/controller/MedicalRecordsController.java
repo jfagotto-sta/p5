@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 
 import services.JsonService;
-import services.IMedicalRecordsService;
+import services.MedicalRecordsService;
 
 @RestController
 public class MedicalRecordsController {
 
 	Logger logger = LoggerFactory.getLogger(MedicalRecordsController.class);
 	
-	private IMedicalRecordsService MService;
+	private MedicalRecordsService MService;
 	private JsonService JsService;
 	
 
 	
-	public MedicalRecordsController(IMedicalRecordsService mService, JsonService jsService) {
+	public MedicalRecordsController(MedicalRecordsService mService, JsonService jsService) {
 		super();
 		MService = mService;
 		JsService = jsService;

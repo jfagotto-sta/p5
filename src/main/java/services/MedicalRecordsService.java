@@ -9,13 +9,13 @@ import com.OpenClassProject.safetyNetAlert.model.Medicalrecords;
 import com.OpenClassProject.safetyNetAlert.repository.IRepository;
 
 @Service
-public class IMedicalRecordsService implements services.ServiceInterface.IMedicalRecordsService {
+public class MedicalRecordsService implements services.ServiceInterface.IMedicalRecordsService {
 
 	private IRepository medicalRep;
 	
 	
 	@Autowired
-	public IMedicalRecordsService(IRepository medicalRep) {
+	public MedicalRecordsService(IRepository medicalRep) {
 		super();
 		this.medicalRep = medicalRep;
 	}

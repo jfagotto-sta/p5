@@ -34,7 +34,7 @@ public class AllInfoFromPerson {
 	private Date birthdate;
 
 	@JsonView(View.infoAge.class)
-	private int age; //
+	private int age;
 	
 	@JsonView(View.infoMedications.class)
 	private List<String> medications;

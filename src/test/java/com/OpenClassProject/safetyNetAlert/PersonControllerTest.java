@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
-import services.IPersonService;
+import services.PersonService;
 
 
 @SpringBootTest
@@ -45,7 +45,7 @@ class PersonControllerTest {
 	public MockMvc mockMvc;
 	
 	@MockBean
-	private IPersonService personService;
+	private PersonService personService;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {

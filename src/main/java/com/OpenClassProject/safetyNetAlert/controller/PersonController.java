@@ -21,7 +21,7 @@ import com.OpenClassProject.safetyNetAlert.model.specific.ChildAlert;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import services.JsonService;
-import services.IPersonService;
+import services.PersonService;
 
 @RestController
 public class PersonController {
@@ -29,10 +29,10 @@ public class PersonController {
 	Logger logger = LoggerFactory.getLogger(PersonController.class);
 	
 	private JsonService JsService;
-	private IPersonService PService;
+	private PersonService PService;
 
 
-	public PersonController(JsonService JsService, IPersonService PService) {
+	public PersonController(JsonService JsService, PersonService PService) {
 		super();
 		this.JsService = JsService;
 		this.PService = PService;

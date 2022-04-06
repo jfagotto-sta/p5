@@ -11,12 +11,12 @@ import com.OpenClassProject.safetyNetAlert.model.specific.ChildAlert;
 import com.OpenClassProject.safetyNetAlert.repository.IRepository;
 
 @Service
-public class IPersonService implements services.ServiceInterface.IPersonService {
+public class PersonService implements services.ServiceInterface.IPersonService {
 	
 	private IRepository personRepo;
 	
 	@Autowired
-	public IPersonService(IRepository repo) {
+	public PersonService(IRepository repo) {
 		this.personRepo = repo;
 	}
 	
@@ -39,16 +39,16 @@ public class IPersonService implements services.ServiceInterface.IPersonService 
 		return personRepo.updateAPerson(person);
 		
 	}
-
+	@Override
 	public List<AllInfoFromPerson> personInfo(String lastName, String firstName) {
 		return personRepo.getPersonInfo(lastName, firstName);
 	}
-	
+	@Override
 	public ChildAlert getChildAlert(String address) {
 		return personRepo.getChildAlert(address);
 	}
 
-
+	@Override
 	public List<AllInfoFromPerson> getPersonLivingInThisAddress(String address) {
 		return personRepo.getPersonLivingAtThisAddress(address);
 	}

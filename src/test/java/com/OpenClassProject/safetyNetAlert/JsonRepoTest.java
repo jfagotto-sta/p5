@@ -95,8 +95,10 @@ class JsonRepoTest {
 	
 	@Test
 	void getPhoneAlert() {
+
+		List<String> phoneNumber = jRepo.getPhoneAlert(1);
 		
-		assertNotNull(jRepo.getPhoneAlert(1));
+		assertNotNull(phoneNumber);
 	}
 	
 	@Test
