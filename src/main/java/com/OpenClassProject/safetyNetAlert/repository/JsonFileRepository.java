@@ -13,6 +13,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.OpenClassProject.safetyNetAlert.model.Firestation;
@@ -28,6 +30,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Repository
 public class JsonFileRepository implements IRepository {
 
+	Logger logger = LoggerFactory.getLogger(JsonFileRepository.class);
+
 	private ListIterator<JSONObject> iterator;
 	private JSONObject object;
 	private JSONParser parser;
@@ -41,6 +45,7 @@ public class JsonFileRepository implements IRepository {
 		return new InputStreamReader(getClass().getClassLoader().getResourceAsStream("data/data.json"));
 	}
 
+	@Override
 	public List<Person> getAllPersonsFromFile() {
 		try {
 
@@ -55,13 +60,14 @@ public class JsonFileRepository implements IRepository {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.debug("Erreur récupération des objets personne");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return persons;
 	}
 
+	@Override
 	public List<Firestation> getAllFirestationsFromFile() {
 		try {
 			if (firestations.isEmpty()) {
@@ -75,7 +81,7 @@ public class JsonFileRepository implements IRepository {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.debug("Erreur récupération des objets casernes");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -83,6 +89,7 @@ public class JsonFileRepository implements IRepository {
 
 	}
 
+	@Override
 	public List<Medicalrecords> getAllMedicalRecordsFromFile() {
 		try {
 			if (medicalRecords.isEmpty()) {
@@ -96,7 +103,7 @@ public class JsonFileRepository implements IRepository {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.debug("Erreur récupération des objets dossiers médicaux");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -104,6 +111,7 @@ public class JsonFileRepository implements IRepository {
 
 	}
 
+	@Override
 	public void deleteAPerson(String lastName, String firstName) {
 		this.persons = getAllPersonsFromFile();
 		Person person = getPersonWithThisLastNameAndFirstName(lastName, firstName);
@@ -113,12 +121,14 @@ public class JsonFileRepository implements IRepository {
 
 	}
 
+	@Override
 	public Person createAPerson(Person person) {
 		this.persons = getAllPersonsFromFile();
 		persons.add(person);
 		return person;
 	}
 
+	@Override
 	public Person getPersonWithThisLastNameAndFirstName(String lastName, String firstName) {
 		this.persons = getAllPersonsFromFile();
 		for (Person person : persons) {
@@ -129,6 +139,7 @@ public class JsonFileRepository implements IRepository {
 		return null;
 	}
 
+	@Override
 	public Firestation getFirestation(String addres) {
 		this.firestations = getAllFirestationsFromFile();
 		for (Firestation firestation : firestations) {
@@ -139,6 +150,7 @@ public class JsonFileRepository implements IRepository {
 		return null;
 	}
 
+	@Override
 	public Person updateAPerson(Person person) {
 		this.persons = getAllPersonsFromFile();
 		Person foundAPersonToUpdate = getPersonWithThisLastNameAndFirstName(person.getLastName(),
@@ -155,12 +167,14 @@ public class JsonFileRepository implements IRepository {
 		return null;
 	}
 
+	@Override
 	public Firestation createAMappingFirestationAdress(Firestation firestation) {
 		this.firestations = getAllFirestationsFromFile();
 		firestations.add(firestation);
 		return firestation;
 	}
 
+	@Override
 	public boolean deleteAFirestation(Firestation firestation) {
 		this.firestations = getAllFirestationsFromFile();
 		Optional<Firestation> foundAFiretation = firestations.stream().filter(fs -> fs.equals(firestation)).findFirst();
@@ -170,6 +184,7 @@ public class JsonFileRepository implements IRepository {
 		return false;
 	}
 
+	@Override
 	public Firestation updateAFirestation(Firestation firestation) {
 		this.firestations = getAllFirestationsFromFile();
 		Firestation foundAFirestationToUpdate = getFirestation(firestation.getAddress());
@@ -177,6 +192,7 @@ public class JsonFileRepository implements IRepository {
 		return foundAFirestationToUpdate;
 	}
 
+	@Override
 	public Medicalrecords createAMedicalRecord(Medicalrecords medicalrecords) {
 		this.medicalRecords = getAllMedicalRecordsFromFile();
 		medicalRecords.add(medicalrecords);
@@ -184,6 +200,7 @@ public class JsonFileRepository implements IRepository {
 
 	}
 
+	@Override
 	public boolean deleteAMedicalrecord(String lastName, String firstName) {
 		this.medicalRecords = getAllMedicalRecordsFromFile();
 		Medicalrecords objectToBeRemoved = null;
@@ -198,6 +215,7 @@ public class JsonFileRepository implements IRepository {
 		return false;
 	}
 
+	@Override
 	public Medicalrecords getMdicalReocrdsWithThisLastNameAndFirstName(String lastName, String firstName) {
 		this.medicalRecords = getAllMedicalRecordsFromFile();
 		for (Medicalrecords medicalrecords : medicalRecords) {
@@ -208,6 +226,7 @@ public class JsonFileRepository implements IRepository {
 		return null;
 	}
 
+	@Override
 	public Medicalrecords updateAMedicalrecord(Medicalrecords medicalrecords) {
 		this.medicalRecords = getAllMedicalRecordsFromFile();
 
@@ -252,6 +271,7 @@ public class JsonFileRepository implements IRepository {
 		return personInfos;
 	}
 
+	@Override
 	public List<String> getMailAddressesForACity(String city) {
 		this.persons = getAllPersonsFromFile();
 		List<String> emailList = new ArrayList<>();
@@ -381,6 +401,7 @@ public class JsonFileRepository implements IRepository {
 
 	}
 
+	@Override
 	public List<String> getAdresseFromStation(int stationNumber) {
 		this.firestations = getAllFirestationsFromFile();
 		List<String> adresses = new ArrayList<>();

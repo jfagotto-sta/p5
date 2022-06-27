@@ -1,6 +1,7 @@
 package com.OpenClassProject.safetyNetAlert;
 
 
+import com.OpenClassProject.safetyNetAlert.repository.IRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,9 +39,8 @@ class PersonControllerTest {
 	private List<Person> persons = new ArrayList<>();
 
 	@Autowired
-	private JsonFileRepository JRepo;
-	
-	
+	private IRepository iRepo;
+
 	@Autowired
 	public MockMvc mockMvc;
 	
@@ -57,7 +57,7 @@ class PersonControllerTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		persons = JRepo.getAllPersonsFromFile();
+		persons = iRepo.getAllPersonsFromFile();
 	}
 
 	@AfterEach
@@ -111,7 +111,7 @@ class PersonControllerTest {
 		String p2 = obj.writeValueAsString(person2);
 		persons.add(person);
 		
-		Person foundAPersonToUpdate = JRepo.getPersonWithThisLastNameAndFirstName("Hurlorage", "Illidan");
+		Person foundAPersonToUpdate = iRepo.getPersonWithThisLastNameAndFirstName("Hurlorage", "Illidan");
 		
 		personService.updateAPerson(foundAPersonToUpdate);
 		

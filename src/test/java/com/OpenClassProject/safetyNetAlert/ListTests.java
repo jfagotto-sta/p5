@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.OpenClassProject.safetyNetAlert.repository.IRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,9 +25,9 @@ import com.OpenClassProject.safetyNetAlert.repository.JsonFileRepository;
  
 @SpringBootTest
 class ListTests {
-	
+
 	@Autowired
-	private JsonFileRepository JsfRepo;
+	private IRepository iRepo;
 	
 	private List<Person> persons = new ArrayList<>();
 	private List<Firestation> firestations = new ArrayList<>();
@@ -53,7 +54,7 @@ class ListTests {
 	@DisplayName("Test pour vérifier l'initialisation de la liste de personnes")
 	@Test
 	public void testListOfPerson() {
-		persons = JsfRepo.getAllPersonsFromFile();
+		persons = iRepo.getAllPersonsFromFile();
 		
 		assertTrue(persons.size()>0);
 	}
@@ -61,7 +62,7 @@ class ListTests {
 	@DisplayName("Test pour vérifier l'initialisation de la liste de casernes")
 	@Test
 	public void testListOfFirestation() {
-		firestations = JsfRepo.getAllFirestationsFromFile();
+		firestations = iRepo.getAllFirestationsFromFile();
 		
 		assertTrue(firestations.size()>0);
 	}
@@ -69,7 +70,7 @@ class ListTests {
 	@DisplayName("Test pour vérifier l'initialisation de la liste de profils médicamenteux")
 	@Test
 	public void testListOfMedicalrecord() {
-		medicalRecords = JsfRepo.getAllMedicalRecordsFromFile();
+		medicalRecords = iRepo.getAllMedicalRecordsFromFile();
 		
 		assertTrue(medicalRecords.size()>0);
 	}

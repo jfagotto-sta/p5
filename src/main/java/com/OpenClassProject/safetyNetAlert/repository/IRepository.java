@@ -24,7 +24,11 @@ public interface IRepository {
 	public void deleteAPerson(String lastName, String firstName);
 	
 	public Person createAPerson (Person person);
-	
+
+	Person getPersonWithThisLastNameAndFirstName(String lastName, String firstName);
+
+	Firestation getFirestation(String addres);
+
 	public Person updateAPerson (Person person);
 	
 	public Firestation createAMappingFirestationAdress(Firestation firestation);
@@ -36,11 +40,15 @@ public interface IRepository {
 	public Medicalrecords createAMedicalRecord(Medicalrecords medicalrecords);
 	
 	public boolean deleteAMedicalrecord(String lastName, String firstName);
-	
+
+	Medicalrecords getMdicalReocrdsWithThisLastNameAndFirstName(String lastName, String firstName);
+
 	public Medicalrecords updateAMedicalrecord (Medicalrecords medicalrecords);
 
 	public List<AllInfoFromPerson> getPersonInfo(String lastName, String firstName);
-	
+
+	List<String> getMailAddressesForACity(String city);
+
 	public ChildAlert getChildAlert(String address);
 
 	public List<String> getPhoneAlert(int station);
@@ -48,6 +56,8 @@ public interface IRepository {
 	public List<AllInfoFromPerson> getPersonLivingAtThisAddress(String address);
 	
 	public List<ByStationInfo> getInfoFromStationList(List<String> stations);
+
+	List<String> getAdresseFromStation(int stationNumber);
 
 	public PeopleAtFirestation personsCoveredByAFirestation(int station);
 }

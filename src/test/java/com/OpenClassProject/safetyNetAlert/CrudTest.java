@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.OpenClassProject.safetyNetAlert.repository.IRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,6 +24,9 @@ import com.OpenClassProject.safetyNetAlert.model.Person;
 import com.OpenClassProject.safetyNetAlert.repository.JsonFileRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import services.ServiceInterface.IFireStationService;
+import services.ServiceInterface.IMedicalRecordsService;
+import services.ServiceInterface.IPersonService;
 
 
 @SpringBootTest
@@ -34,7 +38,17 @@ class CrudTest {
 	private List<Medicalrecords> medicalrecords = new ArrayList<>();
 
 	@Autowired
-	private JsonFileRepository jRepo;
+	private IRepository iRepo;
+
+
+	@Autowired
+	private IPersonService pService;
+
+	@Autowired
+	private IMedicalRecordsService mService;
+
+	@Autowired
+	private IFireStationService fService;
 
 
 	@BeforeAll
@@ -47,9 +61,9 @@ class CrudTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		this.persons = jRepo.getAllPersonsFromFile();
-		this.firestations = jRepo.getAllFirestationsFromFile();
-		this.medicalrecords = jRepo.getAllMedicalRecordsFromFile();
+		this.persons = iRepo.getAllPersonsFromFile();
+		this.firestations = iRepo.getAllFirestationsFromFile();
+		this.medicalrecords = iRepo.getAllMedicalRecordsFromFile();
 
 	}
 
@@ -69,7 +83,7 @@ class CrudTest {
 
 		int listOfPersonBeforeTheCreation = persons.size();
 
-		jRepo.createAPerson(person);
+		pService.createANewPerson(person);
 
 
 		assertEquals(listOfPersonBeforeTheCreation + 1, persons.size());
@@ -81,7 +95,7 @@ class CrudTest {
 
 		int listOfPersonBeforeTheDelete = persons.size();
 
-		jRepo.deleteAPerson("Boyd", "John");
+		pService.deleteAPerson("Boyd", "John");
 
 		assertEquals(listOfPersonBeforeTheDelete - 1, persons.size());
 
@@ -110,7 +124,7 @@ class CrudTest {
 
 		persons.add(person);
 
-		Person foundAPersonToUpdate = jRepo.updateAPerson(person2);
+		Person foundAPersonToUpdate = pService.updateAPerson(person2);
 		assertTrue(person.getEmail().equals(foundAPersonToUpdate.getEmail()));
 
 	}
@@ -134,7 +148,7 @@ class CrudTest {
 
 		int listSizeBeforeTheCreation = medicalrecords.size();
 
-		jRepo.createAMedicalRecord(medicalrecord);
+		mService.createAMedicalRecord(medicalrecord);
 
 		assertEquals(medicalrecords.size(), listSizeBeforeTheCreation + 1);
 	}
@@ -165,7 +179,7 @@ class CrudTest {
 
 		medicalrecords.add(medicalrecords1);
 
-		Medicalrecords foundAMedicalRecord = jRepo.updateAMedicalrecord(medicalrecords2);
+		Medicalrecords foundAMedicalRecord = mService.updateAMedicalrecord(medicalrecords2);
 
 		assertTrue(foundAMedicalRecord.getBirthdate().equals(medicalrecords2.getBirthdate()));
 
@@ -176,7 +190,7 @@ class CrudTest {
 
 		int listSizeBeforeTheDeletion = medicalrecords.size();
 
-		jRepo.deleteAMedicalrecord("Boyd", "John");
+		mService.deleteAMedicalrecord("Boyd", "John");
 
 		assertEquals(listSizeBeforeTheDeletion - 1, medicalrecords.size());
 
@@ -188,7 +202,7 @@ class CrudTest {
 
 		int listSizeBeforeCreation = firestations.size();
 
-		jRepo.createAMappingFirestationAdress(firestation);
+		fService.createAMappingFirestationAdress(firestation);
 
 		assertEquals(listSizeBeforeCreation + 1, firestations.size());
 
@@ -202,7 +216,7 @@ class CrudTest {
 		int listOfFirestationsBeforeDeletion = firestations.size();
 		firestations.add(firestation);
 
-		jRepo.deleteAFirestation(firestation);
+		fService.deleteAFirestation(firestation);
 
 		assertEquals(listOfFirestationsBeforeDeletion, firestations.size());
 	}
@@ -218,7 +232,7 @@ class CrudTest {
 
 
 
-		Firestation foundAFirestationToUpdate = jRepo.updateAFirestation(jRepo.getFirestation("rue des champs"));
+		Firestation foundAFirestationToUpdate = fService.updateAFirestation(iRepo.getFirestation("rue des champs"));
 
 		assertNotNull(foundAFirestationToUpdate);
 	}

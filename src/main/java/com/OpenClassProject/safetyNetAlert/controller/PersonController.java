@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import services.JsonService;
 import services.PersonService;
+import services.ServiceInterface.IPersonService;
 
 @RestController
 public class PersonController {
@@ -29,17 +30,19 @@ public class PersonController {
 	Logger logger = LoggerFactory.getLogger(PersonController.class);
 	
 	private JsonService JsService;
-	private PersonService PService;
+
+
+	private IPersonService pService;
 
 
 	public PersonController(JsonService JsService, PersonService PService) {
-		super();
 		this.JsService = JsService;
-		this.PService = PService;
-	
+		this.pService = PService;
+
 	}
 	
-	@GetMapping(path = "/persons")
+	@GetMapping(path = "/persons", consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<Person> getAll() {
 		logger.info("Persons initialized");
@@ -52,7 +55,7 @@ public class PersonController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public Person AddPerson (@RequestBody Person person){	
 		logger.info("Person created");
-		return PService.createANewPerson(person);
+		return pService.createANewPerson(person);
 	}
 	
 	
@@ -60,7 +63,7 @@ public class PersonController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public String deleteAPerson(@RequestParam String lastName, String firstName) {
 		logger.info("Person deleted");
-		PService.deleteAPerson(lastName, firstName);
+		pService.deleteAPerson(lastName, firstName);
 		return "test";
 	}
 	
@@ -70,7 +73,7 @@ public class PersonController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public Person updateAPerson(@RequestBody Person person) {
 		logger.info("Person updated");
-		return PService.updateAPerson(person);
+		return pService.updateAPerson(person);
 	}
 	
 	
@@ -79,7 +82,7 @@ public class PersonController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<AllInfoFromPerson> getPersonInfo(@RequestParam String lastName, String firstName) {
 		logger.info("Person informations initialized");
-		return PService.personInfo(lastName, firstName);
+		return pService.personInfo(lastName, firstName);
 
 	}
 	
@@ -88,7 +91,7 @@ public class PersonController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public ChildAlert getChildAlert(@RequestParam String address) {
 		logger.info("Child Alert initialized");
-		return PService.getChildAlert(address);
+		return pService.getChildAlert(address);
 
 	}
 	
@@ -97,7 +100,7 @@ public class PersonController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<AllInfoFromPerson> getPersonLivingAtThisAddress(@RequestParam String address) {
 		logger.info("Person living at"+ address + "initialized");
-		return PService.getPersonLivingInThisAddress(address);
+		return pService.getPersonLivingInThisAddress(address);
 
 	}
 }

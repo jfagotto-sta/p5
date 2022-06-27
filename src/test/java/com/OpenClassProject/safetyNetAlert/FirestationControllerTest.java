@@ -71,8 +71,6 @@ class FirestationControllerTest {
 		String f = obj.writeValueAsString(firestation);
 		
 		mockMvc.perform(delete("/firestations").contentType(MediaType.APPLICATION_JSON_VALUE).content(f)).andExpect(status().isOk());
-		
-		
 	}
 
 	@Test

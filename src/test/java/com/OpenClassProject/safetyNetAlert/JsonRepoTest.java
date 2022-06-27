@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.OpenClassProject.safetyNetAlert.repository.IRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,8 +32,9 @@ class JsonRepoTest {
 	private List<Firestation> firestations = new ArrayList<>();
 	private List<Medicalrecords> medicalRecords = new ArrayList<>();
 	
+
 	@Autowired
-	private JsonFileRepository jRepo;
+	private IRepository iRepo;
 	
 
 
@@ -46,7 +48,7 @@ class JsonRepoTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		this.persons= jRepo.getAllPersonsFromFile();
+		this.persons= iRepo.getAllPersonsFromFile();
 
 	}
 
@@ -59,7 +61,7 @@ class JsonRepoTest {
 	@Test
 	void getAPersonWithHisLastNameAndFirstName () {
 			
-		Person p = jRepo.getPersonWithThisLastNameAndFirstName("Boyd", "John");
+		Person p = iRepo.getPersonWithThisLastNameAndFirstName("Boyd", "John");
 		
 		assertTrue(p.getCity().equals("Culver"));
 		
@@ -69,7 +71,7 @@ class JsonRepoTest {
 	@Test
 	void getPersonInfo() {
 		
-		List<AllInfoFromPerson> p = jRepo.getPersonInfo("Boyd", "John");
+		List<AllInfoFromPerson> p = iRepo.getPersonInfo("Boyd", "John");
 		
 		
 		assertEquals(p.size(),1);
@@ -79,7 +81,7 @@ class JsonRepoTest {
 	@Test
 	void getMailAddressesForACity() {
 		
-		List<String> mail = jRepo.getMailAddressesForACity("Culver");
+		List<String> mail = iRepo.getMailAddressesForACity("Culver");
 		assertEquals(mail.size(),23);
 	}
 	
@@ -88,7 +90,7 @@ class JsonRepoTest {
 		
 		ChildAlert ca = new ChildAlert();
 		
-		ca = jRepo.getChildAlert("947 E. Rose Dr");
+		ca = iRepo.getChildAlert("947 E. Rose Dr");
 		
 		assertNotNull(ca);
 	}
@@ -96,7 +98,7 @@ class JsonRepoTest {
 	@Test
 	void getPhoneAlert() {
 
-		List<String> phoneNumber = jRepo.getPhoneAlert(1);
+		List<String> phoneNumber = iRepo.getPhoneAlert(1);
 		
 		assertNotNull(phoneNumber);
 	}
@@ -105,7 +107,7 @@ class JsonRepoTest {
 	void getMdicalReocrdsWithThisLastNameAndFirstName() {
 		Medicalrecords m = new Medicalrecords();
 				
-				jRepo.getMdicalReocrdsWithThisLastNameAndFirstName("Boyd", "John");
+				iRepo.getMdicalReocrdsWithThisLastNameAndFirstName("Boyd", "John");
 		
 		assertNotNull(m);
 	}
@@ -115,7 +117,7 @@ class JsonRepoTest {
 		
 		List<AllInfoFromPerson> list = new ArrayList<>();
 		
-		list = jRepo.getPersonLivingAtThisAddress("947 E. Rose Dr");
+		list = iRepo.getPersonLivingAtThisAddress("947 E. Rose Dr");
 		
 		assertEquals(list.size(),3);
 	}
@@ -123,7 +125,7 @@ class JsonRepoTest {
 	@Test
 	void getAdresseFromStation() {
 		
-		List<String> adresses = jRepo.getAdresseFromStation(1);
+		List<String> adresses = iRepo.getAdresseFromStation(1);
 		assertEquals(adresses.size(),3);
 	}
 	
@@ -133,7 +135,7 @@ class JsonRepoTest {
 		
 		PeopleAtFirestation adresses = new PeopleAtFirestation();
 		
-		adresses = jRepo.personsCoveredByAFirestation(1);
+		adresses = iRepo.personsCoveredByAFirestation(1);
 		
 		assertNotNull(adresses);
 	}
@@ -145,7 +147,7 @@ class JsonRepoTest {
 		List<String> stationsFilter = new ArrayList<String>();
 		stationsFilter.add("1");
 		stationsFilter.add("2");
-		bS = jRepo.getInfoFromStationList(stationsFilter);
+		bS = iRepo.getInfoFromStationList(stationsFilter);
 		
 		assertNotNull(bS);
 	}

@@ -18,7 +18,7 @@ class UtilsTest {
 		
 		Medicalrecords medicalrecords= new Medicalrecords();
 		
-		medicalrecords.setBirthdate("09/06/2000");
+		medicalrecords.setBirthdate("30/06/2000");
 
 		int age = Utils.getAgeFromBirthdate(medicalrecords.getBirthdate());
 
